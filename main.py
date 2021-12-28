@@ -30,3 +30,8 @@ def get_chapter_texts(book_path):
 if __name__ == '__main__':
     book_path = "book1.epub"
     chapter_texts = get_chapter_texts(book_path)
+
+    for index, chapter_text in enumerate(chapter_texts):
+        chapter_number = index + 1
+        if chapter_number == 1:
+            print(chapter_text)
