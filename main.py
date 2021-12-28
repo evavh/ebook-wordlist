@@ -16,7 +16,8 @@ def get_chapter_texts(book_path):
                 chapter = re.search("chapter([0-9]{2})", name)[1]
                 chapter = int(chapter)
                 print(chapter)
-                text = BeautifulSoup(content, features="lxml").get_text()
+                text = BeautifulSoup(content, features="lxml")\
+                    .get_text(separator="\n")
                 if previous_chapter is not None:
                     assert (chapter == previous_chapter + 1), \
                         (f"Previous chapter is {previous_chapter}, "
