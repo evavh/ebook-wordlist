@@ -23,10 +23,26 @@ def unicode_category_lists():
     return result
 
 
+def list_to_regex(chars):
+    SPECIAL_CHARACTERS = "]-^\\\""
+    result = ""
+    for char in chars:
+        if char in SPECIAL_CHARACTERS:
+            result += '\\'
+        result += char
+
+    result = "[" + result + "]"
+    return result
+
+
 if __name__ == '__main__':
     norwegian_nonsense = ("jeg- jeg er. t-skjortene er ikke. jeg...og du. "
                           "han-som-ser er her. a leve.")
     unicode = unicode_category_lists()
+    L = list_to_regex(unicode["letters"])
+    NS = list_to_regex(unicode["non-separators"])
+    print("L:", L[:100], "NS:", NS[:300])
+
     words = get_words(norwegian_nonsense)
     correct_words = ['jeg', 'jeg', 'er', 't-skjortene', 'er', 'ikke', 'jeg',
                      'og', 'du', 'han-som-ser', 'er', 'her', 'a', 'leve']
