@@ -17,7 +17,7 @@ def unicode_category_lists():
         if category.startswith('L'):
             result["letters"].append(chr(i))
 
-        if not category.startswith('Z'):  # Z means separator
+        if not category.startswith('Z') and not category.startswith('C'):
             result["non-separators"].append(chr(i))
 
     return result
@@ -26,6 +26,7 @@ def unicode_category_lists():
 if __name__ == '__main__':
     norwegian_nonsense = ("jeg- jeg er. t-skjortene er ikke. jeg...og du. "
                           "han-som-ser er her. a leve.")
+    unicode = unicode_category_lists()
     words = get_words(norwegian_nonsense)
     correct_words = ['jeg', 'jeg', 'er', 't-skjortene', 'er', 'ikke', 'jeg',
                      'og', 'du', 'han-som-ser', 'er', 'her', 'a', 'leve']
