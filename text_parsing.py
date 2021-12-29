@@ -22,18 +22,17 @@ def unicode_category_lists():
         if category.startswith('L'):
             result["letters"].append(chr(i))
 
-        # Z means seperator, C means control character (these do weird things)
-        if not category.startswith('Z') and not category.startswith('C'):
+        if not category.startswith('Z'):  # if not in a seperator category
             result["non-separators"].append(chr(i))
 
     return result
 
 
 def list_to_regex(chars):
-    SPECIAL_CHARACTERS = "]-^\\\""  # to be escaped in the regex
+    TO_BE_ESCAPED = "]-^\\\""
     result = ""
     for char in chars:
-        if char in SPECIAL_CHARACTERS:
+        if char in TO_BE_ESCAPED:
             result += '\\'
         result += char
 
