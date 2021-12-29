@@ -4,7 +4,12 @@ import unicodedata
 
 
 def get_words(text):
-    word_pattern = r"(?:[a-z]+(?:[\-.][a-z]+)*[a-z])|[a-z]"
+    unicode = unicode_category_lists()
+
+    L = list_to_regex(unicode["letters"])
+    NS = list_to_regex(unicode["non-separators"])
+
+    word_pattern = f"(?:{L}+(?:{NS}{L}+)*{L})|{L}"
     words = re.findall(word_pattern, text)
     return words
 
@@ -17,6 +22,7 @@ def unicode_category_lists():
         if category.startswith('L'):
             result["letters"].append(chr(i))
 
+        # Z means seperator, C means control character (these do weird things)
         if not category.startswith('Z') and not category.startswith('C'):
             result["non-separators"].append(chr(i))
 
@@ -24,7 +30,7 @@ def unicode_category_lists():
 
 
 def list_to_regex(chars):
-    SPECIAL_CHARACTERS = "]-^\\\""
+    SPECIAL_CHARACTERS = "]-^\\\""  # to be escaped in the regex
     result = ""
     for char in chars:
         if char in SPECIAL_CHARACTERS:
@@ -36,14 +42,10 @@ def list_to_regex(chars):
 
 
 if __name__ == '__main__':
-    norwegian_nonsense = ("jeg- jeg er. t-skjortene er ikke. jeg...og du. "
-                          "han-som-ser er her. a leve.")
-    unicode = unicode_category_lists()
-    L = list_to_regex(unicode["letters"])
-    NS = list_to_regex(unicode["non-separators"])
-    print("L:", L[:100], "NS:", NS[:300])
+    norwegian_nonsense = ("«Jeg- jeg er. T-skjortene er ikke. Jeg...óg du.»\n"
+                          "Han-som-ser er her. «Å leve!»")
 
-    words = get_words(norwegian_nonsense)
+    words = get_words(norwegian_nonsense.lower())
     correct_words = ['jeg', 'jeg', 'er', 't-skjortene', 'er', 'ikke', 'jeg',
-                     'og', 'du', 'han-som-ser', 'er', 'her', 'a', 'leve']
+                     'óg', 'du', 'han-som-ser', 'er', 'her', 'å', 'leve']
     assert (words == correct_words), f"words: {words} != {correct_words}"
