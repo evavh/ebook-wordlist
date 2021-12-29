@@ -11,7 +11,8 @@ def unicode_category_lists():
         if category.startswith('L'):
             result["letters"].append(chr(i))
 
-        if not category.startswith('Z'):  # if not in a seperator category
+        # Z means seperator, C means control character (\n is one of them)
+        if not category.startswith('Z') and not category.startswith('C'):
             result["non-separators"].append(chr(i))
 
     return result
@@ -45,10 +46,12 @@ def get_words(text, L, NS):
 
 
 if __name__ == '__main__':
-    norwegian_nonsense = ("«Jeg- jeg er. T-skjortene er ikke. Jeg...óg du.»\n"
+    norwegian_nonsense = ("H\nerr Kapitel er vanskelig. «Jeg- jeg er. "
+                          "T-skjortene er ikke. Jeg...óg du.»\n"
                           "Han-som-ser er her. «Å leve!»")
-    correct_words = ['jeg', 'jeg', 'er', 't-skjortene', 'er', 'ikke', 'jeg',
-                     'óg', 'du', 'han-som-ser', 'er', 'her', 'å', 'leve']
     L, NS = cache_regex_strings()
     words = get_words(norwegian_nonsense.lower(), L, NS)
+    correct_words = ['h', 'err', 'kapitel', 'er', 'vanskelig', 'jeg', 'jeg',
+                     'er', 't-skjortene', 'er', 'ikke', 'jeg', 'óg', 'du',
+                     'han-som-ser', 'er', 'her', 'å', 'leve']
     assert (words == correct_words), f"words: {words} != {correct_words}"
