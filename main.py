@@ -9,7 +9,8 @@ if __name__ == '__main__':
 
     for index, chapter_text in enumerate(chapter_texts):
         chapter_number = index + 1
-        print(f"Processing chapter {chapter_number} of {book_path}...")
+        print((f"Processing chapter {chapter_number} of {len(chapter_texts)} "
+               f"of {book_path[:-5]}..."))
 
         L, NS = text_parsing.cache_regex_strings()
         words = text_parsing.get_words(chapter_text.lower(), L, NS)
@@ -18,3 +19,6 @@ if __name__ == '__main__':
 
         print((f"There are {len(frequency_in_chapter)} unique words in this "
               "chapter."))
+
+        chapter_filename = f"{book_path[:-5]}chapter{chapter_number}.txt"
+        file_io.wordlist_to_file(frequency_in_chapter, chapter_filename)
