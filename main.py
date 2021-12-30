@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import text_parsing
 import file_io
+import word_counting
 
 if __name__ == '__main__':
     book_path = "book1.epub"
@@ -8,9 +9,12 @@ if __name__ == '__main__':
 
     for index, chapter_text in enumerate(chapter_texts):
         chapter_number = index + 1
+        print(f"Processing chapter {chapter_number} of {book_path}...")
 
         L, NS = text_parsing.cache_regex_strings()
         words = text_parsing.get_words(chapter_text.lower(), L, NS)
 
-        if chapter_number == 1:
-            print(words)
+        frequency_in_chapter = word_counting.frequency(words)
+
+        print((f"There are {len(frequency_in_chapter)} unique words in this "
+              "chapter."))
