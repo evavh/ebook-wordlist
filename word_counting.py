@@ -11,11 +11,34 @@ def frequency(words):
     return result
 
 
+def add_frequencies(freq1, freq2):
+    result = collections.defaultdict(int)
+
+    for word in freq1:
+        result[word] += freq1[word]
+    for word in freq2:
+        result[word] += freq2[word]
+
+    return result
+
+
 if __name__ == '__main__':
     words = ["here", "are", "some", "words", "these", "words", "are", "great",
              "words"]
     correct_frequency = {"here": 1, "are": 2, "some": 1, "words": 3,
                          "these": 1, "great": 1}
-    print(frequency(words))
     assert frequency(words) == correct_frequency,\
         f"generated {frequency(words)}, correct is {correct_frequency}"
+
+    freq1 = collections.defaultdict(int)
+    freq2 = collections.defaultdict(int)
+    freq1["test"] = 2
+    freq2["test"] = 2
+    freq2["notthere"] = 3
+
+    correct_add = collections.defaultdict(int)
+    correct_add["test"] = 4
+    correct_add["notthere"] = 3
+    assert (add_frequencies(freq1, freq2) == correct_add), \
+        ("freq1 + freq2={correct_add}, "
+         f"add_frequencies  yields {add_frequencies(freq1,freq2)}")
