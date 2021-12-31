@@ -15,10 +15,9 @@ if __name__ == '__main__':
         L, NS = text_parsing.cache_regex_strings()
         words = text_parsing.get_words(chapter_text.lower(), L, NS)
 
-        frequency_in_chapter = word_counting.frequency(words)
-
-        print((f"There are {len(frequency_in_chapter)} unique words in this "
+        freq_in_chapter = word_counting.frequency(words)
+        print((f"There are {len(freq_in_chapter)} unique words in this "
               "chapter."))
 
         chapter_filename = f"{book_path[:-5]}chapter{chapter_number}.txt"
-        file_io.wordlist_to_file(frequency_in_chapter, chapter_filename)
+        file_io.wordlist_to_file(freq_in_chapter, chapter_filename)

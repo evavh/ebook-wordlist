@@ -22,22 +22,22 @@ def add_frequencies(freq1, freq2):
     return result
 
 
-def get_frequency_of_unseen(frequency, frequency_of_seen):
+def freq_of_unseen(freq, frequency_of_seen):
     result = {}
 
-    for word in frequency:
+    for word in freq:
         if word not in frequency_of_seen:
-            result[word] = frequency[word]
+            result[word] = freq[word]
 
     return result
 
 
-def get_frequency_of_repeated(frequency, frequency_of_unseen, known_words):
+def get_freq_of_repeated(freq, freq_of_unseen, known_words):
     result = {}
 
-    for word in frequency:
-        if word not in frequency_of_unseen and word not in known_words:
-            result[word] = frequency[word]
+    for word in freq:
+        if word not in freq_of_unseen and word not in known_words:
+            result[word] = freq[word]
 
     return result
 
