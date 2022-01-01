@@ -42,6 +42,11 @@ def freq_of_repeated(freq, freq_of_unseen, known_words):
     return result
 
 
+def known_words(freq_of_seen, times_until_known):
+    return [word for word in freq_of_seen
+            if freq_of_seen[word] >= times_until_known]
+
+
 if __name__ == '__main__':
     words = ["here", "are", "some", "words", "these", "words", "are", "great",
              "words"]

@@ -14,8 +14,8 @@ if __name__ == '__main__':
     freq_of_seen = collections.defaultdict(int)
 
     for index, chapter_text in enumerate(chapter_texts):
-        known_words = [word for word in freq_of_seen
-                       if freq_of_seen[word] >= TIMES_UNTIL_KNOWN]
+        known_words = word_counting.known_words(freq_of_seen,
+                                                TIMES_UNTIL_KNOWN)
         print((f"Currently {len(freq_of_seen)} words have been seen, of which "
                f"{len(known_words)} are fully known.\n"))
 
@@ -38,10 +38,19 @@ if __name__ == '__main__':
                                                      freq_in_chapter)
 
         print((f"There are {len(freq_in_chapter)} unique words in this "
-              f"chapter,\nof which {len(freq_of_unseen)} are previously unseen,"
+              f"chapter,\nof which {len(freq_of_unseen)} are yet unseen,"
                f"\nof which {len(freq_of_repeated)} words have been "
                "seen before but are not yet fully known."))
 
-        chapter_filename = f"{book_path[:-5]}chapter{chapter_number}.txt"
+        filename = f"{book_path[:-5]}chapter{chapter_number}.txt"
+        file_io.remove_file(filename)
 
-        file_io.wordlist_to_file(freq_in_chapter, chapter_filename)
+        file_io.string_to_file("New words in this chapter:\n", filename)
+        file_io.wordlist_to_file(freq_of_unseen, filename)
+        file_io.string_to_file("\nRepeated words in this chapter:\n", filename)
+        file_io.wordlist_to_file(freq_of_repeated, filename)
+
+    known_words = word_counting.known_words(freq_of_seen,
+                                            TIMES_UNTIL_KNOWN)
+    with open("known_words.txt", 'w') as file:
+        file.writelines(known_words)

@@ -1,8 +1,13 @@
+import os
 import re
-import operator
 import ebooklib
 from ebooklib import epub
 from bs4 import BeautifulSoup
+
+
+def remove_file(filename):
+    if os.path.exists(filename):
+        os.remove(filename)
 
 
 def get_chapter_texts(book_path):
@@ -30,11 +35,14 @@ def get_chapter_texts(book_path):
     return result
 
 
+def string_to_file(string, path):
+    with open(path, 'a') as file:
+        file.write(string)
+
+
 def wordlist_to_file(frequency, path):
     sorted_words = sorted(frequency.keys(),
                           key=frequency.get, reverse=True)
-    with open(path, 'w') as file:
-        file.write("#Frequency\tWord\n")
     with open(path, 'a') as file:
         for word in sorted_words:
-            file.write(f"{frequency[word]}\t\t\t{word}\n")
+            file.write(f"{frequency[word]}\t{word}\n")
