@@ -35,6 +35,17 @@ def get_chapter_texts(book_path):
     return result
 
 
+def format_meanings(meanings):
+    if len(meanings) == 1:
+        return meanings[0]
+    else:
+        result = ""
+        for index, meaning in enumerate(meanings):
+            meaning = meaning[0]
+            result += f"{index + 1}. {meaning}\n"
+        return result
+
+
 def string_to_file(string, path):
     with open(path, 'a') as file:
         file.write(string)
@@ -46,3 +57,9 @@ def wordlist_to_file(frequency, path):
     with open(path, 'a') as file:
         for word in sorted_words:
             file.write(f"{frequency[word]}\t{word}\n")
+
+
+if __name__ == '__main__':
+    meanings = [['the act of guessing, sensing, suspecting; a clue, idea'],
+                ['a very weak occurrence (of something)']]
+    print(format_meanings(meanings))
