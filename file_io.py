@@ -37,12 +37,20 @@ def get_chapter_texts(book_path):
 
 def format_meanings(meanings):
     if len(meanings) == 1:
-        return meanings[0]
+        if isinstance(meanings[0], list):
+            return meanings[0][0] + '\n'
+        else:
+            return meanings[0] + '\n'
     else:
         result = ""
         for index, meaning in enumerate(meanings):
             meaning = meaning[0]
-            result += f"{index + 1}. {meaning}\n"
+            if isinstance(meaning, list):
+                meaning = meaning[0]
+            if index == 0:
+                result += f"{index + 1}. {meaning}\n"
+            else:
+                result += f"\t\t\t\t\t{index + 1}. {meaning}\n"
         return result
 
 
@@ -51,12 +59,17 @@ def string_to_file(string, path):
         file.write(string)
 
 
-def wordlist_to_file(frequency, path):
+def wordlist_to_file(frequency, path, translations):
     sorted_words = sorted(frequency.keys(),
                           key=frequency.get, reverse=True)
     with open(path, 'a') as file:
         for word in sorted_words:
-            file.write(f"{frequency[word]}\t{word}\n")
+            file.write(f"{frequency[word]}\t{word}\t\t\t")
+            if word in translations:
+                translation = translations[word]
+                file.write(format_meanings(translation))
+            else:
+                file.write("WORD NOT FOUND\n")
 
 
 if __name__ == '__main__':

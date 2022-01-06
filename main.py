@@ -4,10 +4,15 @@ import collections
 import text_parsing
 import file_io
 import word_counting
+import translating
 
 if __name__ == '__main__':
     TIMES_UNTIL_KNOWN = 15
+    WIKTIONARY_JSON = "dictionary.json"
     book_path = "book1.epub"
+
+    translations = translating.parse_dictionary(WIKTIONARY_JSON)
+    L, NS = text_parsing.cache_regex_strings()
 
     chapter_texts = file_io.get_chapter_texts(book_path)
 
@@ -23,7 +28,6 @@ if __name__ == '__main__':
         print((f"Processing chapter {chapter_number} of {len(chapter_texts)} "
                f"of {book_path[:-5]}..."))
 
-        L, NS = text_parsing.cache_regex_strings()
         words = text_parsing.get_words(chapter_text.lower(), L, NS)
 
         freq_in_chapter = word_counting.frequency(words)
@@ -46,9 +50,9 @@ if __name__ == '__main__':
         file_io.remove_file(filename)
 
         file_io.string_to_file("New words in this chapter:\n", filename)
-        file_io.wordlist_to_file(freq_of_unseen, filename)
+        file_io.wordlist_to_file(freq_of_unseen, filename, translations)
         file_io.string_to_file("\nRepeated words in this chapter:\n", filename)
-        file_io.wordlist_to_file(freq_of_repeated, filename)
+        file_io.wordlist_to_file(freq_of_repeated, filename, translations)
 
     known_words = word_counting.known_words(freq_of_seen,
                                             TIMES_UNTIL_KNOWN)
