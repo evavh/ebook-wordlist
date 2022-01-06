@@ -10,6 +10,11 @@ def remove_file(filename):
         os.remove(filename)
 
 
+def create_directory(directory_name):
+    if not os.path.exists(directory_name):
+        os.makedirs(directory_name)
+
+
 def get_chapter_texts(book_path):
     book = epub.read_epub(book_path)
     result = []

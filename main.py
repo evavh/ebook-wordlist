@@ -9,7 +9,12 @@ import translating
 if __name__ == '__main__':
     TIMES_UNTIL_KNOWN = 15
     WIKTIONARY_JSON = "dictionary.json"
+    OUTPUT_FOLDER = "output"
     book_path = "book1.epub"
+
+    file_io.create_directory(OUTPUT_FOLDER)
+    book_output_dir = f"{OUTPUT_FOLDER}/{book_path[:-5]}"
+    file_io.create_directory(book_output_dir)
 
     translations = translating.parse_dictionary(WIKTIONARY_JSON)
     L, NS = text_parsing.cache_regex_strings()
@@ -46,7 +51,7 @@ if __name__ == '__main__':
                f"\nof which {len(freq_of_repeated)} words have been "
                "seen before but are not yet fully known."))
 
-        filename = f"{book_path[:-5]}chapter{chapter_number}.txt"
+        filename = f"{book_output_dir}/chapter{chapter_number:02}.txt"
         file_io.remove_file(filename)
 
         file_io.string_to_file("New words in this chapter:\n", filename)
