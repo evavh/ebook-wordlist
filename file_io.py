@@ -59,6 +59,29 @@ def format_meanings(meanings):
         return result
 
 
+def unpack_list(meaning):
+    if isinstance(meaning, list):
+        return meaning[0]
+
+
+def word_to_latex(word, translations):
+    result = "\\textbf{"+word+"}\n"
+
+    if word in translations:
+        meanings = translations[word]
+        if len(meanings) == 1:
+            result += unpack_list(meanings[0]) + '\n'
+        else:
+            result += "\\begin{enumerate}\n"
+            for meaning in meanings:
+                result += f"\\item {unpack_list(meaning)}\n"
+            result += "\\end{enumerate}\n"
+    else:
+        result += "WORD NOT FOUND (COULD BE A NAME)\n"
+
+    return result
+
+
 def string_to_file(string, path):
     with open(path, 'a') as file:
         file.write(string)
