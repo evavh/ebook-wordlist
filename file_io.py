@@ -8,8 +8,8 @@ LATEX_PRELUDE = ("\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n"
                  "\\usepackage[T1]{fontenc}\n"
                  "\\usepackage{newunicodechar}\n\\newunicodechar{⁻}{-}\n"
                  "\\newunicodechar{⁸}{}\n"
-                 "\\usepackage[margin=1in]{geometry}\n\\leftskip=1em\n"
-                 "\\parindent=-1em\n\\usepackage{indentfirst}\n\n"
+                 "\\usepackage[margin=1in]{geometry}\n"
+                 "\\parindent=1em\n\\usepackage{indentfirst}\n\n"
                  "\\begin{document}\n\n")
 
 
@@ -82,19 +82,19 @@ def unpack_list(meaning):
 
 
 def word_to_latex(word, translations):
-    result = "\n\\textbf{"+word+"}"
+    result = "\n\\subsubsection*{"+word+"}"
 
     if word in translations:
         meanings = translations[word]
         if len(meanings) == 1:
-            result += "\\\\\n"+escape_latex(unpack_list(meanings[0])) + "\n"
+            result += "\n"+escape_latex(unpack_list(meanings[0])) + "\n"
         else:
             result += "\n\\begin{enumerate}\n"
             for meaning in meanings:
                 result += "\\item "+escape_latex(unpack_list(meaning)) + "\n"
             result += "\\end{enumerate}\n"
     else:
-        result += "indent WORD NOT FOUND (COULD BE A NAME)\n"
+        result += "WORD NOT FOUND (COULD BE A NAME)\n"
 
     return result
 
