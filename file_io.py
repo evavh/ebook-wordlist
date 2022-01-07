@@ -8,7 +8,9 @@ LATEX_PRELUDE = ("\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n"
                  "\\usepackage[T1]{fontenc}\n"
                  "\\usepackage{newunicodechar}\n\\newunicodechar{⁻}{-}\n"
                  "\\newunicodechar{⁸}{}\n"
-                 "\\usepackage[margin=1in]{geometry}\n\n\\begin{document}\n\n")
+                 "\\usepackage[margin=1in]{geometry}\n\\leftskip=1em\n"
+                 "\\parindent=-1em\n\\usepackage{indentfirst}\n\n"
+                 "\\begin{document}\n\n")
 
 
 def remove_file(filename):
@@ -65,28 +67,34 @@ def format_meanings(meanings):
         return result
 
 
+def escape_latex(string):
+    translation_dict = {"&": r"\&", "%": r"\%", "$": r"\$", "#": r"\#",
+                        "_": r"\_", "{": r"\{", "}": r"\}",
+                        "~": r"\\textasciitilde", "^": r"\\textasciicircum",
+                        "\\": r"\\textbackslash"}
+    translation_table = str.maketrans(translation_dict)
+    return string.translate(translation_table)
+
+
 def unpack_list(meaning):
     if isinstance(meaning, list):
         return meaning[0]
 
 
 def word_to_latex(word, translations):
-    result = "\\textbf{"+word+"}\n"
+    result = "\n\\textbf{"+word+"}"
 
     if word in translations:
         meanings = translations[word]
         if len(meanings) == 1:
-            result += "\\indent\\begin{verbatim}"\
-                + unpack_list(meanings[0]) + "\\end{verbatim}\n"
+            result += "\\\\\n"+escape_latex(unpack_list(meanings[0])) + "\n"
         else:
-            result += "\\begin{enumerate}\n"
+            result += "\n\\begin{enumerate}\n"
             for meaning in meanings:
-                result += "\\item \\begin{verbatim}"+unpack_list(meaning) +\
-                    "\\end{verbatim}\n"
+                result += "\\item "+escape_latex(unpack_list(meaning)) + "\n"
             result += "\\end{enumerate}\n"
     else:
-        result += ("\\\\\\indent WORD NOT FOUND (COULD BE A NAME)"
-                   "\\\\\n")
+        result += "indent WORD NOT FOUND (COULD BE A NAME)\n"
 
     return result
 
