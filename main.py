@@ -11,10 +11,15 @@ if __name__ == '__main__':
     WIKTIONARY_JSON = "dictionary.json"
     OUTPUT_FOLDER = "output"
     book_path = "book1.epub"
+    book_title = book_path[:-5]
 
     file_io.create_directory(OUTPUT_FOLDER)
-    book_output_dir = f"{OUTPUT_FOLDER}/{book_path[:-5]}"
-    file_io.create_directory(book_output_dir)
+    book_tex_path = f"{OUTPUT_FOLDER}/{book_title}.tex"
+    file_io.remove_file(book_tex_path)
+
+    file_io.string_to_file(file_io.LATEX_PRELUDE, book_tex_path)
+    file_io.string_to_file("\\begin{center}\n{\\Huge \\textbf{Wordlist for "
+                           + book_title+"}}\n\\end{center}\n\n", book_tex_path)
 
     translations = translating.parse_dictionary(WIKTIONARY_JSON)
     L, NS = text_parsing.cache_regex_strings()
@@ -51,13 +56,16 @@ if __name__ == '__main__':
                f"\nof which {len(freq_of_repeated)} words have been "
                "seen before but are not yet fully known."))
 
-        filename = f"{book_output_dir}/chapter{chapter_number:02}.txt"
-        file_io.remove_file(filename)
+        file_io.string_to_file("\\section*{Chapter "+str(chapter_number)+"}\n",
+                               book_tex_path)
+        file_io.string_to_file("\\subsection*{New words:}\n", book_tex_path)
+        file_io.wordlist_to_file(freq_of_unseen, book_tex_path, translations)
 
-        file_io.string_to_file("New words in this chapter:\n", filename)
-        file_io.wordlist_to_file(freq_of_unseen, filename, translations)
-        file_io.string_to_file("\nRepeated words in this chapter:\n", filename)
-        file_io.wordlist_to_file(freq_of_repeated, filename, translations)
+        file_io.string_to_file("\\subsection*{Repeated words:}\n",
+                               book_tex_path)
+        file_io.wordlist_to_file(freq_of_repeated, book_tex_path, translations)
+
+    file_io.string_to_file("\\end{document}", book_tex_path)
 
     known_words = word_counting.known_words(freq_of_seen,
                                             TIMES_UNTIL_KNOWN)

@@ -2,3 +2,7 @@
 **/__pycache__/
 *.txt
 dictionary.json
+output/
+*.aux
+*.log
+*.pdf

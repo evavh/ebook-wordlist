@@ -4,6 +4,12 @@ import ebooklib
 from ebooklib import epub
 from bs4 import BeautifulSoup
 
+LATEX_PRELUDE = ("\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n"
+                 "\\usepackage[T1]{fontenc}\n"
+                 "\\usepackage{newunicodechar}\n\\newunicodechar{⁻}{-}\n"
+                 "\\newunicodechar{⁸}{}\n"
+                 "\\usepackage[margin=1in]{geometry}\n\n\\begin{document}\n\n")
+
 
 def remove_file(filename):
     if os.path.exists(filename):
@@ -31,7 +37,7 @@ def get_chapter_texts(book_path):
                     .get_text(separator="\n")
 
                 if previous_chapter is not None:
-                    assert (chapter == previous_chapter + 1), \
+                    assert (chapter == previous_chapter + 1),\
                         (f"Previous chapter is {previous_chapter}, "
                          f"but this chapter is {chapter}")
 
@@ -70,14 +76,17 @@ def word_to_latex(word, translations):
     if word in translations:
         meanings = translations[word]
         if len(meanings) == 1:
-            result += unpack_list(meanings[0]) + '\n'
+            result += "\\indent\\begin{verbatim}"\
+                + unpack_list(meanings[0]) + "\\end{verbatim}\n"
         else:
             result += "\\begin{enumerate}\n"
             for meaning in meanings:
-                result += f"\\item {unpack_list(meaning)}\n"
+                result += "\\item \\begin{verbatim}"+unpack_list(meaning) +\
+                    "\\end{verbatim}\n"
             result += "\\end{enumerate}\n"
     else:
-        result += "WORD NOT FOUND (COULD BE A NAME)\n"
+        result += ("\\\\\\indent WORD NOT FOUND (COULD BE A NAME)"
+                   "\\\\\n")
 
     return result
 
@@ -90,14 +99,9 @@ def string_to_file(string, path):
 def wordlist_to_file(frequency, path, translations):
     sorted_words = sorted(frequency.keys(),
                           key=frequency.get, reverse=True)
-    with open(path, 'a') as file:
-        for word in sorted_words:
-            file.write(f"{frequency[word]}\t{word}\t\t\t")
-            if word in translations:
-                translation = translations[word]
-                file.write(format_meanings(translation))
-            else:
-                file.write("WORD NOT FOUND\n")
+    for word in sorted_words:
+        word_latex = word_to_latex(word, translations)
+        string_to_file(word_latex, path)
 
 
 if __name__ == '__main__':
