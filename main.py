@@ -20,7 +20,8 @@ if __name__ == '__main__':
     file_io.string_to_file(file_io.LATEX_PRELUDE, book_tex_path)
     file_io.string_to_file("\\begin{center}\n{\\Huge \\textbf{Wordlist for "
                            + book_title+"}}\n\\end{center}\n\n"
-                           + "\\tableofcontents", book_tex_path)
+                           + "\\setcounter{tocdepth}{2}\\tableofcontents",
+                           book_tex_path)
 
     translations = translating.parse_dictionary(WIKTIONARY_JSON)
     L, NS = text_parsing.cache_regex_strings()
