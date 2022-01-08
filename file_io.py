@@ -4,7 +4,8 @@ import ebooklib
 from ebooklib import epub
 from bs4 import BeautifulSoup
 
-LATEX_PRELUDE = ("\\documentclass[8pt]{article}\n\\usepackage[utf8]{inputenc}\n"
+LATEX_PRELUDE = ("\\documentclass[8pt]{article}\n"
+                 "\\usepackage[utf8]{inputenc}\n"
                  "\\usepackage[T1]{fontenc}\n\\setcounter{secnumdepth}{0}\n"
                  "\\usepackage{newunicodechar}\n\\newunicodechar{⁻}{-}\n"
                  "\\newunicodechar{⁸}{}\n"
@@ -95,7 +96,7 @@ def word_to_latex(word, translations):
                 result += "\\item "+escape_latex(unpack_list(meaning)) + "\n"
             result += "\\end{enumerate}\n"
     else:
-        result += "WORD NOT FOUND (COULD BE A NAME)\n"
+        result += "WORD NOT FOUND\n"
 
     return result
 

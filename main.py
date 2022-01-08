@@ -21,7 +21,8 @@ if __name__ == '__main__':
     file_io.string_to_file(file_io.LATEX_PRELUDE, book_tex_path)
     file_io.string_to_file("\\begin{center}\n{\\Huge \\textbf{Wordlist for "
                            + book_title+"}}\n\\end{center}\n\n"
-                           + "\\setcounter{tocdepth}{2}\\tableofcontents",
+                           + "\\setcounter{tocdepth}{2}\\tableofcontents"
+                           + "\\renewcommand{\\baselinestretch}{0.5}",
                            book_tex_path)
 
     translations = translating.parse_dictionary(WIKTIONARY_JSON)
@@ -37,7 +38,6 @@ if __name__ == '__main__':
         already_known_words = text_parsing.get_words(already_known_raw, L, NS)
         for word in already_known_words:
             freq_of_seen[word] = TIMES_UNTIL_KNOWN + 1
-        print(freq_of_seen)
 
     for index, chapter_text in enumerate(chapter_texts[:2]):
         known_words = word_counting.known_words(freq_of_seen,
