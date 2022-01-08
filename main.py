@@ -19,7 +19,8 @@ if __name__ == '__main__':
 
     file_io.string_to_file(file_io.LATEX_PRELUDE, book_tex_path)
     file_io.string_to_file("\\begin{center}\n{\\Huge \\textbf{Wordlist for "
-                           + book_title+"}}\n\\end{center}\n\n", book_tex_path)
+                           + book_title+"}}\n\\end{center}\n\n"
+                           + "\\tableofcontents", book_tex_path)
 
     translations = translating.parse_dictionary(WIKTIONARY_JSON)
     L, NS = text_parsing.cache_regex_strings()
@@ -56,12 +57,12 @@ if __name__ == '__main__':
                f"\nof which {len(freq_of_repeated)} words have been "
                "seen before but are not yet fully known."))
 
-        file_io.string_to_file("\\section*{Chapter "+str(chapter_number)+"}\n",
+        file_io.string_to_file("\\section{Chapter "+str(chapter_number)+"}\n",
                                book_tex_path)
-        file_io.string_to_file("\\subsection*{New words:}\n", book_tex_path)
+        file_io.string_to_file("\\subsection{New words}\n", book_tex_path)
         file_io.wordlist_to_file(freq_of_unseen, book_tex_path, translations)
 
-        file_io.string_to_file("\\subsection*{Repeated words:}\n",
+        file_io.string_to_file("\\subsection{Repeated words}\n",
                                book_tex_path)
         file_io.wordlist_to_file(freq_of_repeated, book_tex_path, translations)
 

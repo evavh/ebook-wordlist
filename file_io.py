@@ -5,10 +5,11 @@ from ebooklib import epub
 from bs4 import BeautifulSoup
 
 LATEX_PRELUDE = ("\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n"
-                 "\\usepackage[T1]{fontenc}\n"
+                 "\\usepackage[T1]{fontenc}\n\\setcounter{secnumdepth}{0}\n"
                  "\\usepackage{newunicodechar}\n\\newunicodechar{⁻}{-}\n"
                  "\\newunicodechar{⁸}{}\n"
                  "\\usepackage[margin=1in]{geometry}\n"
+                 "\\usepackage[hidelinks]{hyperref}\n"
                  "\\parindent=1em\n\\usepackage{indentfirst}\n\n"
                  "\\begin{document}\n\n")
 
@@ -82,7 +83,7 @@ def unpack_list(meaning):
 
 
 def word_to_latex(word, translations):
-    result = "\n\\subsubsection*{"+word+"}"
+    result = "\n\\subsubsection{"+word+"}"
 
     if word in translations:
         meanings = translations[word]
