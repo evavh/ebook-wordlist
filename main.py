@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import collections
+import os
 
 import text_parsing
 import file_io
@@ -30,7 +31,15 @@ if __name__ == '__main__':
 
     freq_of_seen = collections.defaultdict(int)
 
-    for index, chapter_text in enumerate(chapter_texts):
+    if os.path.exists("already_known.txt"):
+        with open("already_known.txt", 'r') as file:
+            already_known_raw = file.read()
+        already_known_words = text_parsing.get_words(already_known_raw, L, NS)
+        for word in already_known_words:
+            freq_of_seen[word] = TIMES_UNTIL_KNOWN + 1
+        print(freq_of_seen)
+
+    for index, chapter_text in enumerate(chapter_texts[:2]):
         known_words = word_counting.known_words(freq_of_seen,
                                                 TIMES_UNTIL_KNOWN)
         print((f"Currently {len(freq_of_seen)} words have been seen, of which "
