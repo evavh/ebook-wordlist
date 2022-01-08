@@ -39,7 +39,7 @@ if __name__ == '__main__':
         for word in already_known_words:
             freq_of_seen[word] = TIMES_UNTIL_KNOWN + 1
 
-    for index, chapter_text in enumerate(chapter_texts[:2]):
+    for index, chapter_text in enumerate(chapter_texts):
         known_words = word_counting.known_words(freq_of_seen,
                                                 TIMES_UNTIL_KNOWN)
         print((f"Currently {len(freq_of_seen)} words have been seen, of which "
@@ -69,10 +69,13 @@ if __name__ == '__main__':
 
         file_io.string_to_file("\\section{Chapter "+str(chapter_number)+"}\n",
                                book_tex_path)
-        file_io.string_to_file("\\subsection{New words}\n", book_tex_path)
+        file_io.string_to_file("\\subsection{New words ("
+                               + str(len(freq_of_unseen))+")}\n",
+                               book_tex_path)
         file_io.wordlist_to_file(freq_of_unseen, book_tex_path, translations)
 
-        file_io.string_to_file("\\subsection{Repeated words}\n",
+        file_io.string_to_file("\\subsection{Repeated words ("
+                               + str(len(freq_of_repeated))+")}\n",
                                book_tex_path)
         file_io.wordlist_to_file(freq_of_repeated, book_tex_path, translations)
 
