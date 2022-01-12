@@ -25,6 +25,23 @@ def create_directory(directory_name):
         os.makedirs(directory_name)
 
 
+def get_book_paths(root_folder):
+    book_paths = []
+    root_files = sorted(os.listdir(root_folder))
+    for file in root_files:
+        file_path = root_folder+'/'+file
+        if os.path.isdir(file_path):
+            series_path = file_path
+            series_files = sorted(os.listdir(file_path))
+            for file in series_files:
+                file_path = series_path+'/'+file
+                if file_path.endswith('.epub'):
+                    book_paths.append(file_path)
+        elif file_path.endswith('.epub'):
+            book_paths.append(file_path)
+    return book_paths
+
+
 def get_chapter_texts(book_path):
     book = epub.read_epub(book_path)
     result = []
@@ -128,3 +145,6 @@ if __name__ == '__main__':
     meanings = [['the act of guessing, sensing, suspecting; a clue, idea'],
                 ['a very weak occurrence (of something)']]
     print(format_meanings(meanings))
+    book_paths = get_book_paths("/home/eva/books")
+    for book_path in book_paths:
+        print(book_path)
