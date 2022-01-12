@@ -9,7 +9,7 @@ LATEX_PRELUDE = ("\\documentclass[8pt]{article}\n"
                  "\\usepackage[T1]{fontenc}\n\\setcounter{secnumdepth}{0}\n"
                  "\\usepackage{newunicodechar}\n\\newunicodechar{⁻}{-}\n"
                  "\\newunicodechar{⁸}{}\n"
-                 "\\usepackage[a5paper,margin=0.7cm]{geometry}\n"
+                 "\\usepackage[a5paper,margin=1.5cm]{geometry}\n"
                  "\\usepackage[hidelinks]{hyperref}\n"
                  "\\parindent=1em\n\\usepackage{indentfirst}\n\n"
                  "\\begin{document}\n\n")
@@ -110,6 +110,18 @@ def wordlist_to_file(frequency, path, translations):
     for word in frequency:
         word_latex = word_to_latex(word, translations)
         string_to_file(word_latex, path)
+
+
+def pdflatex_and_cleanup(temp_folder, output_folder, tex_path):
+    # run pdflatex to times to make the table of contents work
+    os.system(f"pdflatex --output-directory={temp_folder} {tex_path}")
+    os.system(f"pdflatex --output-directory={temp_folder} {tex_path}")
+    latex_file_root = tex_path[:-4]
+    remove_file(latex_file_root+".aux")
+    remove_file(latex_file_root+".log")
+    remove_file(latex_file_root+".out")
+    remove_file(latex_file_root+".toc")
+    os.system(f"mv {latex_file_root}.pdf {output_folder}")
 
 
 if __name__ == '__main__':

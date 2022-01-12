@@ -10,12 +10,14 @@ import translating
 if __name__ == '__main__':
     TIMES_UNTIL_KNOWN = 5
     WIKTIONARY_JSON = "dictionary.json"
+    TEMP_FOLDER = "temp"
     OUTPUT_FOLDER = "output"
     book_path = "book1.epub"
     book_title = book_path[:-5]
 
     file_io.create_directory(OUTPUT_FOLDER)
-    book_tex_path = f"{OUTPUT_FOLDER}/{book_title}.tex"
+    file_io.create_directory(TEMP_FOLDER)
+    book_tex_path = f"{TEMP_FOLDER}/{book_title}.tex"
     file_io.remove_file(book_tex_path)
 
     file_io.string_to_file(file_io.LATEX_PRELUDE, book_tex_path)
@@ -80,6 +82,7 @@ if __name__ == '__main__':
         file_io.wordlist_to_file(freq_of_repeated, book_tex_path, translations)
 
     file_io.string_to_file("\\end{document}", book_tex_path)
+    file_io.pdflatex_and_cleanup(TEMP_FOLDER, OUTPUT_FOLDER, book_tex_path)
 
     known_words = word_counting.known_words(freq_of_seen,
                                             TIMES_UNTIL_KNOWN)

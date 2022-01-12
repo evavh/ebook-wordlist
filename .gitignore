@@ -3,6 +3,4 @@
 *.txt
 dictionary.json
 output/
-*.aux
-*.log
-*.pdf
+temp/
