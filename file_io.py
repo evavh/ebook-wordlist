@@ -92,7 +92,7 @@ def word_to_latex(word, translations):
             result += "\n"+escape_latex(unpack_list(meanings[0])) + "\n"
         else:
             result += "\n\\begin{enumerate}\n"
-            for meaning in meanings:
+            for meaning in meanings[:3]:
                 result += "\\item "+escape_latex(unpack_list(meaning)) + "\n"
             result += "\\end{enumerate}\n"
     else:

@@ -8,7 +8,7 @@ import word_counting
 import translating
 
 if __name__ == '__main__':
-    TIMES_UNTIL_KNOWN = 15
+    TIMES_UNTIL_KNOWN = 5
     WIKTIONARY_JSON = "dictionary.json"
     OUTPUT_FOLDER = "output"
     book_path = "book1.epub"
