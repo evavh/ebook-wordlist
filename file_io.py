@@ -107,8 +107,7 @@ def string_to_file(string, path):
 
 
 def wordlist_to_file(frequency, path, translations):
-    sorted_words = sorted(frequency.keys())
-    for word in sorted_words:
+    for word in frequency:
         word_latex = word_to_latex(word, translations)
         string_to_file(word_latex, path)
 
