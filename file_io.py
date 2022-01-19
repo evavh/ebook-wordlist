@@ -8,7 +8,7 @@ LATEX_PRELUDE = ("\\documentclass[8pt]{article}\n"
                  "\\usepackage[utf8]{inputenc}\n"
                  "\\usepackage[T1]{fontenc}\n\\setcounter{secnumdepth}{0}\n"
                  "\\usepackage{newunicodechar}\n\\newunicodechar{⁻}{-}\n"
-                 "\\newunicodechar{⁸}{}\n"
+                 "\\newunicodechar{⁸}{}\n\\newunicodechar{♥}{}"
                  "\\usepackage[a5paper,margin=1.5cm]{geometry}\n"
                  "\\usepackage[hidelinks]{hyperref}\n"
                  "\\parindent=1em\n\\usepackage{indentfirst}\n\n"
@@ -131,14 +131,14 @@ def wordlist_to_file(frequency, path, translations):
 
 def pdflatex_and_cleanup(temp_folder, output_folder, tex_path):
     # run pdflatex to times to make the table of contents work
-    os.system(f"pdflatex --output-directory={temp_folder} {tex_path}")
-    os.system(f"pdflatex --output-directory={temp_folder} {tex_path}")
+    os.system(f"pdflatex --output-directory={temp_folder} \"{tex_path}\"")
+    os.system(f"pdflatex --output-directory={temp_folder} \"{tex_path}\"")
     latex_file_root = tex_path[:-4]
     remove_file(latex_file_root+".aux")
     remove_file(latex_file_root+".log")
     remove_file(latex_file_root+".out")
     remove_file(latex_file_root+".toc")
-    os.system(f"mv {latex_file_root}.pdf {output_folder}")
+    os.system(f"mv \"{latex_file_root}\".pdf {output_folder}")
 
 
 if __name__ == '__main__':
