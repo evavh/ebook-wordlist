@@ -1,17 +1,28 @@
 #!/usr/bin/python3
 import collections
 import os
+import argparse
 
 import text_parsing
 import file_io
 import word_counting
 import translating
 
+
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("root_folder", help="folder that contains books")
+    return parser.parse_args()
+
+
 if __name__ == '__main__':
     TIMES_UNTIL_KNOWN = 5
     WIKTIONARY_JSON = "dictionary.json"
     TEMP_FOLDER = "temp"
     OUTPUT_FOLDER = "output"
+
+    root_folder = parse_arguments().root_folder
+
     book_path = "book1.epub"
     book_title = book_path[:-5]
 
