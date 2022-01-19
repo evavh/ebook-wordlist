@@ -30,7 +30,7 @@ if __name__ == '__main__':
     translations = translating.parse_dictionary(WIKTIONARY_JSON)
     regex_strings = text_parsing.cache_regex_strings()
 
-    freq_of_seen = collections.defaultdict(int)
+    seen_before = collections.defaultdict(int)
 
     if os.path.exists("already_known.txt"):
         with open("already_known.txt", 'r') as file:
@@ -38,11 +38,10 @@ if __name__ == '__main__':
         already_known_words = text_parsing.get_words(already_known_raw,
                                                      regex_strings)
         for word in already_known_words:
-            freq_of_seen[word] = TIMES_UNTIL_KNOWN + 1
+            seen_before[word] = TIMES_UNTIL_KNOWN + 1
 
     for book_path in book_paths:
         book_title = os.path.basename(book_path)[:-5]
-        print(book_title)
 
         book_tex_path = f"{TEMP_FOLDER}/{book_title}.tex"
         file_io.remove_file(book_tex_path)
@@ -57,10 +56,7 @@ if __name__ == '__main__':
         chapter_texts = file_io.get_chapter_texts(book_path)
 
         for index, chapter_text in enumerate(chapter_texts):
-            known_words = word_counting.known_words(freq_of_seen,
-                                                    TIMES_UNTIL_KNOWN)
-            print((f"Currently {len(freq_of_seen)} words have been seen, of "
-                   f"which {len(known_words)} are fully known.\n"))
+            print(f"Currently {len(seen_before)} words have been seen.")
 
             chapter_number = index + 1
             print((f"Processing chapter {chapter_number} of "
@@ -68,35 +64,16 @@ if __name__ == '__main__':
 
             words = text_parsing.get_words(chapter_text.lower(), regex_strings)
 
-            freq_in_chapter = word_counting.frequency(words)
+            not_known, seen_before = word_counting.new_lists(words,
+                                                             seen_before,
+                                                             TIMES_UNTIL_KNOWN)
 
-            freq_of_unseen = word_counting.freq_of_unseen(freq_in_chapter,
-                                                          freq_of_seen)
-            freq_of_repeated = word_counting.freq_of_repeated(freq_in_chapter,
-                                                              freq_of_unseen,
-                                                              known_words)
-
-            freq_of_seen = word_counting.add_frequencies(freq_of_seen,
-                                                         freq_in_chapter)
-
-            print((f"There are {len(freq_in_chapter)} unique words in this "
-                  f"chapter,\nof which {len(freq_of_unseen)} are yet unseen,"
-                   f"\nof which {len(freq_of_repeated)} words have been "
-                   "seen before but are not yet fully known."))
+            print(f"Added {len(not_known)} words to chapter wordlist.\n")
 
             file_io.string_to_file("\\section{Chapter "+str(chapter_number)
-                                   + "}\n", book_tex_path)
-            file_io.string_to_file("\\subsection{New words ("
-                                   + str(len(freq_of_unseen))+")}\n",
+                                   + " ("+str(len(not_known))+")}\n",
                                    book_tex_path)
-            file_io.wordlist_to_file(
-                freq_of_unseen, book_tex_path, translations)
-
-            file_io.string_to_file("\\subsection{Repeated words ("
-                                   + str(len(freq_of_repeated))+")}\n",
-                                   book_tex_path)
-            file_io.wordlist_to_file(
-                freq_of_repeated, book_tex_path, translations)
+            file_io.wordlist_to_file(not_known, book_tex_path, translations)
 
         file_io.string_to_file("\\end{document}", book_tex_path)
         file_io.latex_and_cleanup(TEMP_FOLDER, OUTPUT_FOLDER, book_tex_path)
