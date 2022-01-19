@@ -7,8 +7,6 @@ from bs4 import BeautifulSoup
 LATEX_PRELUDE = ("\\documentclass[8pt]{article}\n"
                  "\\usepackage[utf8]{inputenc}\n"
                  "\\usepackage[T1]{fontenc}\n\\setcounter{secnumdepth}{0}\n"
-                 "\\usepackage{newunicodechar}\n\\newunicodechar{⁻}{-}\n"
-                 "\\newunicodechar{⁸}{}\n\\newunicodechar{♥}{}"
                  "\\usepackage[a5paper,margin=1.5cm]{geometry}\n"
                  "\\usepackage[hidelinks]{hyperref}\n"
                  "\\parindent=1em\n\\usepackage{indentfirst}\n\n"
@@ -129,10 +127,10 @@ def wordlist_to_file(frequency, path, translations):
         string_to_file(word_latex, path)
 
 
-def pdflatex_and_cleanup(temp_folder, output_folder, tex_path):
+def latex_and_cleanup(temp_folder, output_folder, tex_path):
     # run pdflatex to times to make the table of contents work
-    os.system(f"pdflatex --output-directory={temp_folder} \"{tex_path}\"")
-    os.system(f"pdflatex --output-directory={temp_folder} \"{tex_path}\"")
+    os.system(f"lualatex --output-directory={temp_folder} \"{tex_path}\"")
+    os.system(f"lualatex --output-directory={temp_folder} \"{tex_path}\"")
     latex_file_root = tex_path[:-4]
     remove_file(latex_file_root+".aux")
     remove_file(latex_file_root+".log")

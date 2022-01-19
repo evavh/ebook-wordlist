@@ -99,4 +99,4 @@ if __name__ == '__main__':
                 freq_of_repeated, book_tex_path, translations)
 
         file_io.string_to_file("\\end{document}", book_tex_path)
-        file_io.pdflatex_and_cleanup(TEMP_FOLDER, OUTPUT_FOLDER, book_tex_path)
+        file_io.latex_and_cleanup(TEMP_FOLDER, OUTPUT_FOLDER, book_tex_path)
