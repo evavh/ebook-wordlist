@@ -36,10 +36,11 @@ def cache_regex_strings():
     L = list_to_regex(unicode["letters"])
     NS = list_to_regex(unicode["non-separators"])
 
-    return L, NS
+    return (L, NS)
 
 
-def get_words(text, L, NS):
+def get_words(text, regex_strings):
+    L, NS = regex_strings
     word_pattern = f"(?:{L}+(?:{NS}{L}+)*{L})|{L}"
     words = re.findall(word_pattern, text)
     return words

@@ -28,14 +28,15 @@ if __name__ == '__main__':
     file_io.create_directory(TEMP_FOLDER)
 
     translations = translating.parse_dictionary(WIKTIONARY_JSON)
-    L, NS = text_parsing.cache_regex_strings()
+    regex_strings = text_parsing.cache_regex_strings()
 
     freq_of_seen = collections.defaultdict(int)
 
     if os.path.exists("already_known.txt"):
         with open("already_known.txt", 'r') as file:
             already_known_raw = file.read()
-        already_known_words = text_parsing.get_words(already_known_raw, L, NS)
+        already_known_words = text_parsing.get_words(already_known_raw,
+                                                     regex_strings)
         for word in already_known_words:
             freq_of_seen[word] = TIMES_UNTIL_KNOWN + 1
 
@@ -65,7 +66,7 @@ if __name__ == '__main__':
             print((f"Processing chapter {chapter_number} of "
                    f"{len(chapter_texts)} of {book_title}..."))
 
-            words = text_parsing.get_words(chapter_text.lower(), L, NS)
+            words = text_parsing.get_words(chapter_text.lower(), regex_strings)
 
             freq_in_chapter = word_counting.frequency(words)
 
