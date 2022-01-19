@@ -101,9 +101,9 @@ def unpack_list(meaning):
 
 
 def word_to_latex(word, translations):
-    result = "\n\\subsubsection{"+word+"}"
-
     if word in translations:
+        result = "\n\\subsubsection{"+word+"}"
+
         meanings = translations[word]
         if len(meanings) == 1:
             result += "\n"+escape_latex(unpack_list(meanings[0])) + "\n"
@@ -112,10 +112,10 @@ def word_to_latex(word, translations):
             for meaning in meanings[:3]:
                 result += "\\item "+escape_latex(unpack_list(meaning)) + "\n"
             result += "\\end{enumerate}\n"
-    else:
-        result += "WORD NOT FOUND\n"
 
-    return result
+        return result
+    else:
+        return ""
 
 
 def string_to_file(string, path):
