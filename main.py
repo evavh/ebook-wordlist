@@ -5,6 +5,7 @@ import argparse
 
 import text_parsing
 import file_io
+import latex
 import word_counting
 import translating
 
@@ -46,7 +47,7 @@ if __name__ == '__main__':
         book_tex_path = f"{TEMP_FOLDER}/{book_title}.tex"
         file_io.remove_file(book_tex_path)
 
-        file_io.string_to_file(file_io.LATEX_PRELUDE, book_tex_path)
+        file_io.string_to_file(latex.LATEX_PRELUDE, book_tex_path)
         file_io.string_to_file("\\begin{center}\n{\\Huge \\textbf{Wordlist for"
                                " \"" + book_title+"\"}}\n\\end{center}\n\n"
                                + "\\setcounter{tocdepth}{2}\\tableofcontents"
