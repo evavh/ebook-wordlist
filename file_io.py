@@ -49,25 +49,6 @@ def get_chapter_texts(book_path):
     return result
 
 
-def format_meanings(meanings):
-    if len(meanings) == 1:
-        if isinstance(meanings[0], list):
-            return meanings[0][0] + '\n'
-        else:
-            return meanings[0] + '\n'
-    else:
-        result = ""
-        for index, meaning in enumerate(meanings):
-            meaning = meaning[0]
-            if isinstance(meaning, list):
-                meaning = meaning[0]
-            if index == 0:
-                result += f"{index + 1}. {meaning}\n"
-            else:
-                result += f"\t\t\t\t\t{index + 1}. {meaning}\n"
-        return result
-
-
 def string_to_file(string, path):
     with open(path, 'a') as file:
         file.write(string)
@@ -80,9 +61,6 @@ def wordlist_to_file(frequency, path, translations):
 
 
 if __name__ == '__main__':
-    meanings = [['the act of guessing, sensing, suspecting; a clue, idea'],
-                ['a very weak occurrence (of something)']]
-    print(format_meanings(meanings))
     book_paths = get_book_paths("/home/eva/books")
     for book_path in book_paths:
         print(book_path)
