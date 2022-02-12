@@ -18,7 +18,8 @@ def parse_arguments():
 
 if __name__ == '__main__':
     TIMES_UNTIL_KNOWN = 5
-    WIKTIONARY_JSON = "dictionary.json"
+    WIKTIONARY_JSON = "wiktionary.json"
+    APERTIUM_DIX = "apertium.dix"
     TEMP_FOLDER = "temp"
     OUTPUT_FOLDER = "output"
 
@@ -28,7 +29,8 @@ if __name__ == '__main__':
     file_io.create_directory(OUTPUT_FOLDER)
     file_io.create_directory(TEMP_FOLDER)
 
-    translations = translating.parse_dictionary(WIKTIONARY_JSON)
+    translations = translating.combine_dictionaries(APERTIUM_DIX,
+                                                    WIKTIONARY_JSON)
     regex_strings = text_parsing.cache_regex_strings()
 
     seen_before = collections.defaultdict(int)

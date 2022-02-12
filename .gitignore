@@ -1,6 +1,7 @@
 **/*.epub
 **/__pycache__/
 *.txt
-dictionary.json
+wiktionary.json
+apertium.dix
 output/
 temp/

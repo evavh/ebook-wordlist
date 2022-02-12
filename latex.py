@@ -23,6 +23,8 @@ def escape_latex(string):
 def unpack_list(meaning):
     if isinstance(meaning, list):
         return meaning[0]
+    else:
+        return meaning
 
 
 def word_to_latex(word, translations):
