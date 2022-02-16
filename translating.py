@@ -38,8 +38,9 @@ def parse_wiktionary(filename):
                     root_word = meaning["form_of"][0]["word"]
                     result[word].append(Meaning(True, root_word))
                 elif "glosses" in meaning:
-                    content = meaning["glosses"]
-                    result[word].append(Meaning(False, content))
+                    contents = meaning["glosses"]
+                    for content in contents:
+                        result[word].append(Meaning(False, content))
 
     return result
 

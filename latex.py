@@ -20,28 +20,17 @@ def escape_latex(string):
     return string.translate(translation_table)
 
 
-def unpack(meaning):
-    if isinstance(meaning, list):
-        return meaning[0]
-    else:
-        return meaning
-
-
 def word_to_latex(word, translations):
     if word in translations:
         result = "\n\\subsubsection{"+word+"}"
 
         meanings = translations[word]
         if len(meanings) == 1:
-            result += ("\n"
-                       f"{escape_latex(unpack(unpack(meanings[0]).content))}"
-                       "\n")
+            result += (f"\n{escape_latex(meanings[0].content)}\n")
         else:
             result += "\n\\begin{enumerate}\n"
             for meaning in meanings[:3]:
-                result += ("\\item "
-                           f"{escape_latex(unpack(unpack(meaning).content))}"
-                           "\n")
+                result += (f"\\item {escape_latex(meaning.content)}\n")
             result += "\\end{enumerate}\n"
 
         return result
