@@ -79,4 +79,4 @@ if __name__ == '__main__':
             file_io.wordlist_to_file(not_known, book_tex_path, translations)
 
         file_io.string_to_file("\\end{document}", book_tex_path)
-        file_io.latex_and_cleanup(TEMP_FOLDER, OUTPUT_FOLDER, book_tex_path)
+        latex.latex_and_cleanup(TEMP_FOLDER, OUTPUT_FOLDER, book_tex_path)

@@ -3,6 +3,9 @@ import xml.etree.ElementTree as ET
 import collections
 
 
+Meaning = collections.namedtuple("Meaning", ["form_of", "content"])
+
+
 def parse_apertium(filename):
     xml_tree = ET.parse(filename)
     root = xml_tree.getroot()
@@ -18,7 +21,7 @@ def parse_apertium(filename):
                 item = child[0]
                 word = item[0].text
                 translation = item[1].text
-                result[word].append(translation)
+                result[word].append(Meaning(False, translation))
     return result
 
 
@@ -31,8 +34,12 @@ def parse_wiktionary(filename):
             word = entry["word"].lower()
             meanings = entry["senses"]
             for meaning in meanings:
-                if "raw_glosses" in meaning:
-                    result[word].append(meaning["raw_glosses"])
+                if "form_of" in meaning:
+                    root_word = meaning["form_of"][0]["word"]
+                    result[word].append(Meaning(True, root_word))
+                elif "glosses" in meaning:
+                    content = meaning["glosses"]
+                    result[word].append(Meaning(False, content))
 
     return result
 
