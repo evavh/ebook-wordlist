@@ -20,20 +20,36 @@ def escape_latex(string):
     return string.translate(translation_table)
 
 
+def to_latex_list(meanings):
+    if "," in "".join(meanings) and len(meanings) > 1:
+        result = "\n\\begin{enumerate}\n"
+        for meaning in meanings:
+            result += "\\item " + meaning
+        result += "\\end{enumerate}\n"
+        return result
+    else:
+        return "- "+", ".join(meanings)+"\n"
+
+
+def expand_meanings(word, translations):
+    result = []
+    meanings = translations[word]
+    for meaning in meanings:
+        if meaning.form_of:
+            root_word = meaning.content
+            if root_word in translations:
+                result.append("\\textbf{"+root_word+"}: " +
+                              to_latex_list(expand_meanings(root_word,
+                                                            translations)))
+        else:
+            result.append(meaning.content)
+    return result
+
+
 def word_to_latex(word, translations):
     if word in translations:
-        result = "\n\\subsubsection{"+word+"}"
-
-        meanings = translations[word]
-        if len(meanings) == 1:
-            result += (f"\n{escape_latex(meanings[0].content)}\n")
-        else:
-            result += "\n\\begin{enumerate}\n"
-            for meaning in meanings[:3]:
-                result += (f"\\item {escape_latex(meaning.content)}\n")
-            result += "\\end{enumerate}\n"
-
-        return result
+        formatted_word = to_latex_list(expand_meanings(word, translations))
+        return "\\textbf{"+word+"} "+formatted_word+"\n"
     else:
         return ""
 
