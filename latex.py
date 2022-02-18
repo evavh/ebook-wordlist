@@ -21,6 +21,9 @@ def escape_latex(string):
 
 
 def to_latex_list(meanings):
+    meanings_dedup = []
+    [meanings_dedup.append(x) for x in meanings if x not in meanings_dedup]
+    meanings = meanings_dedup[:3]
     if "," in "".join(meanings) and len(meanings) > 1:
         result = "\n\\begin{enumerate}\n"
         for meaning in meanings:
