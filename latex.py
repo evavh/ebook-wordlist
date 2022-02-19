@@ -27,10 +27,14 @@ def remove_brackets(string):
     return string
 
 
+def deduplicate(list):
+    result = []
+    [result.append(x) for x in list if x not in result]
+    return result
+
+
 def to_latex_list(meanings):
-    meanings_dedup = []
-    [meanings_dedup.append(x) for x in meanings if x not in meanings_dedup]
-    meanings = meanings_dedup[:3]
+    meanings = deduplicate(meanings)[:3]
     if "," in "".join(meanings) and len(meanings) > 1:
         result = ""
         for i, meaning in enumerate(meanings):
@@ -58,14 +62,19 @@ def expand_meanings(word, translations):
 
 def word_to_latex(word, translations):
     if word in translations:
+        meanings = deduplicate(translations[word])
         formatted_word = to_latex_list(expand_meanings(word, translations))
+        if len(meanings) == 1:
+            meaning = meanings[0]
+            if meaning.form_of and meaning.content in word:
+                return formatted_word + "\n"
         return "\\textbf{"+word+"} - "+formatted_word+"\n"
     else:
         return ""
 
 
 def latex_and_cleanup(temp_folder, output_folder, tex_path):
-    # run pdflatex to times to make the table of contents work
+    # run pdflatex two times to make the table of contents work
     os.system(f"lualatex --output-directory={temp_folder} \"{tex_path}\"")
     os.system(f"lualatex --output-directory={temp_folder} \"{tex_path}\"")
     latex_file_root = tex_path[:-4]
