@@ -1,4 +1,5 @@
 import os
+import re
 
 import file_io
 
@@ -18,6 +19,12 @@ def escape_latex(string):
                         "\\": r"\\textbackslash"}
     translation_table = str.maketrans(translation_dict)
     return string.translate(translation_table)
+
+
+def remove_brackets(string):
+    while '(' in string and ')' in string:
+        string = re.sub(r" \([^()]*\)", "", string)
+    return string
 
 
 def to_latex_list(meanings):
@@ -45,7 +52,7 @@ def expand_meanings(word, translations):
                               to_latex_list(expand_meanings(root_word,
                                                             translations)))
         else:
-            result.append(meaning.content)
+            result.append(remove_brackets(meaning.content))
     return result
 
 
@@ -67,3 +74,15 @@ def latex_and_cleanup(temp_folder, output_folder, tex_path):
     file_io.remove_file(latex_file_root+".out")
     file_io.remove_file(latex_file_root+".toc")
     os.system(f"mv \"{latex_file_root}\".pdf {output_folder}")
+
+
+if __name__ == '__main__':
+    string = "This has brackets (remove this)"
+    assert remove_brackets(string) == "This has brackets ",\
+        f"Brackets still here?: {remove_brackets(string)}"
+    string = "Nested brackets (very difficult (I think) this is)"
+    assert remove_brackets(string) == "Nested brackets ",\
+        f"Brackets still here?: {remove_brackets(string)}"
+    string = "Brackets (everywhere) brackets (everywhere)"
+    assert remove_brackets(string) == "Brackets  brackets ",\
+        f"Brackets still here?: {remove_brackets(string)}"
