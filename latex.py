@@ -22,7 +22,9 @@ def escape_latex(string):
 
 
 def remove_brackets(string):
-    while '(' in string and ')' in string:
+    loops = 0
+    while '(' in string and ')' in string and loops < 5:
+        loops += 1
         string = re.sub(r" \([^()]*\)", "", string)
     return string
 

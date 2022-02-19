@@ -21,7 +21,8 @@ def parse_apertium(filename):
                 item = child[0]
                 word = item[0].text
                 translation = item[1].text
-                result[word].append(Meaning(False, translation))
+                if translation is not None:
+                    result[word].append(Meaning(False, translation))
     return result
 
 
@@ -40,7 +41,8 @@ def parse_wiktionary(filename):
                 elif "glosses" in meaning:
                     contents = meaning["glosses"]
                     for content in contents:
-                        result[word].append(Meaning(False, content))
+                        if content is not None:
+                            result[word].append(Meaning(False, content))
 
     return result
 
