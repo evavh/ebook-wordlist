@@ -32,13 +32,13 @@ def to_latex_list(meanings):
     [meanings_dedup.append(x) for x in meanings if x not in meanings_dedup]
     meanings = meanings_dedup[:3]
     if "," in "".join(meanings) and len(meanings) > 1:
-        result = "\n\\begin{enumerate}\n"
-        for meaning in meanings:
-            result += "\\item " + meaning
-        result += "\\end{enumerate}\n"
+        result = ""
+        for i, meaning in enumerate(meanings):
+            result += f"{i+1}. {meaning} "
+        result += "\n"
         return result
     else:
-        return "- "+", ".join(meanings)+"\n"
+        return ", ".join(meanings)+"\n"
 
 
 def expand_meanings(word, translations):
@@ -59,7 +59,7 @@ def expand_meanings(word, translations):
 def word_to_latex(word, translations):
     if word in translations:
         formatted_word = to_latex_list(expand_meanings(word, translations))
-        return "\\textbf{"+word+"} "+formatted_word+"\n"
+        return "\\textbf{"+word+"} - "+formatted_word+"\n"
     else:
         return ""
 
