@@ -73,7 +73,8 @@ if __name__ == '__main__':
 
             print(f"Added {len(not_known)} words to chapter wordlist.\n")
 
-            file_io.string_to_file("\\section{Chapter "+str(chapter_number)
+            file_io.string_to_file("\\newpage\n" +
+                                   "\\section{Chapter "+str(chapter_number)
                                    + " ("+str(len(not_known))+")}\n",
                                    book_tex_path)
             file_io.wordlist_to_file(not_known, book_tex_path, translations)
