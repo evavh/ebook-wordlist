@@ -3,7 +3,7 @@
 
 This Python script generates lists of words per chapter with translation. Input is a folder of foreign language epubs, with subfolders for book series. Output is a pdf file per book, filtered for words already encountered in previous books and chapters.
 
-The script parses words from epub text by chapter, using unicode categories to distinguish letters and non-seperator characters. This means it should work with any language that has enough word entries in en.wiktionary.org, and has words that:
+The script parses words from epub text by chapter, using unicode categories to distinguish letters and non-seperator characters. This means it should work with any language that has enough word entries in apertium or en.wiktionary.org, and has words that:
 - Start and end with a "letter".
 - Don't contain "seperator" or "control" characters.
 - Don't contain two non-"letters" in a row.
@@ -22,12 +22,19 @@ You need LaTeX to generate the pdf, I use the apt package ```texlive-full```, an
 Clone this repo:
 ```git clone git@github.com:evavh/ebook-wordlist.git```
 
+Download an apertium language pair .dix file:
+- Go [here](https://apertium.github.io/apertium-on-github/source-browser.html) (see [this page](https://wiki.apertium.org/wiki/List_of_language_pairs) for a clearer overview of available pairs)
+- Click the pair you want (probably a *-eng pair)
+- Download the .dix file from the github page.
+
+Put this file in the cloned repo's root folder (where main.py is) and rename it to ```apertium.dix```
+
 Download a wiktionary json file from [here](https://kaikki.org/dictionary/):
 - Click the source language
 - Click "All word senses" under "Word sense lists"
 - Scroll down and click "Download JSON data for these senses"
 
-Put this file in the cloned repo's root folder (where main.py is) and rename it to ```dictionary.json```.
+Put this file in the cloned repo's root folder and rename it to ```wiktionary.json```.
 
 
 ## How to use ##
